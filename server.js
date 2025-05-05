@@ -13,6 +13,8 @@ import uploadRoutes from './routes/upload.route.js';
 import dbPlugin from './plugins/db.js';
 import typeormPlugin from './plugins/typeorm.js';
 import rabbitmqPlugin from './plugins/rabbitmq.js';
+import errorHandlerPlugin from './plugins/error-handler.js';
+import hooksPlugin from './plugins/hooks.js';
 
 // Load environment variables
 dotenv.config();
@@ -36,9 +38,12 @@ fastify.register(cors, { origin: '*' });
 fastify.register(fastifyMultipart, {
   limits: { fileSize: 10000000 },
 });
+await fastify.register(hooksPlugin);
+
 fastify.register(dbPlugin);
 // fastify.register(typeormPlugin);
 // fastify.register(rabbitmqPlugin);
+fastify.register(errorHandlerPlugin);
 
 // Routes
 fastify.register(indexRoutes);
